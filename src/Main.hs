@@ -7,7 +7,7 @@ import Data.List (foldl', sortBy)
 import Data.Function (on)
 import Prelude hiding (words)
 
-import qualified Graph as G
+import qualified Boggle.Graph as G
 
 -- |Convert a path (list of indexes) into a word according to a given
 -- board specification.  The indexes go from 0 to 15 (inclusively)

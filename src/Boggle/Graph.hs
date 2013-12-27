@@ -1,10 +1,10 @@
-module Graph ( Graph
-             , empty
-             , neighbors
-             , addEdge
-             , boggleGraph
-             , dfs
-             )
+module Boggle.Graph ( Graph
+                    , empty
+                    , neighbors
+                    , addEdge
+                    , boggleGraph
+                    , dfs
+                    )
 where
 
 import qualified Data.IntMap as M
