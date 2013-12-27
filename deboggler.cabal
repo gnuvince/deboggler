@@ -17,6 +17,6 @@ cabal-version:       >=1.8
 
 executable deboggler
   main-is:             Main.hs
-  other-modules:       Boggle.Graph
+  other-modules:       Boggle.Graph, Boggle.Trie
   build-depends:       base ==4.5.*, bytestring ==0.10.*, containers ==0.4.*
   hs-source-dirs:      src

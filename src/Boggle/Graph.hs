@@ -28,26 +28,26 @@ addEdge x y (MkGraph m) =
     MkGraph $ M.insertWith S.union x (S.singleton y)
             $ M.insertWith S.union y (S.singleton x) m
 
-boggleGraph :: Graph
-boggleGraph = L.foldl' addCube empty [0..15]
+boggleGraph :: Int -> Graph
+boggleGraph size = L.foldl' addCube empty [0 .. size^2 - 1]
+    where
+        addCube :: Graph -> Cube -> Graph
+        addCube graph cube =
+            L.foldl' (\g (di, dj) -> if inBoard (i+di, j+dj) then
+                                         addEdge cube (from2D (i+di, j+dj)) g
+                                     else
+                                         g) graph deltas
+            where deltas = [(-1, -1), (-1,  0), (-1,  1),
+                            ( 0, -1),           ( 0,  1),
+                            ( 1, -1), ( 1,  0), ( 1,  1)]
+                  (i, j) = to2D cube
+                  inBoard (x, y) = x >= 0 && x <= size-1 && y >= 0 && y <= size-1
 
-addCube :: Graph -> Cube -> Graph
-addCube graph cube =
-    L.foldl' (\g (di, dj) -> if inBoard (i+di, j+dj) then
-                                 addEdge cube (from2D (i+di, j+dj)) g
-                             else
-                                 g) graph deltas
-    where deltas = [(-1, -1), (-1,  0), (-1,  1),
-                    ( 0, -1),           ( 0,  1),
-                    ( 1, -1), ( 1,  0), ( 1,  1)]
-          (i, j) = to2D cube
-          inBoard (x, y) = x >= 0 && x <= 3 && y >= 0 && y <= 3
+        to2D :: Int -> (Int, Int)
+        to2D n = n `quotRem` size
 
-to2D :: Int -> (Int, Int)
-to2D n = n `quotRem` 4
-
-from2D :: (Int, Int) -> Int
-from2D (i, j) = 4*i + j
+        from2D :: (Int, Int) -> Int
+        from2D (i, j) = size*i + j
 
 dfs :: Int -> Int -> Graph -> [[Cube]]
 dfs depth cube g = go depth cube S.empty
