@@ -21,9 +21,9 @@ add word (Trie eow m) =
     case B.uncons word of
       Nothing -> Trie True m
       Just (c, cs) ->
-        case M.lookup c m of
-          Nothing -> Trie eow (M.insert c (add cs empty) m)
-          Just t  -> Trie eow (M.insert c (add cs t) m)
+          case M.lookup c m of
+            Nothing -> Trie eow (M.insert c (add cs empty) m)
+            Just t  -> Trie eow (M.insert c (add cs t) m)
 
 contains :: B.ByteString -> Trie -> Bool
 contains word (Trie eow m) =
