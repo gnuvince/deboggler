@@ -3,7 +3,7 @@ module Main where
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Set as S
 import           System.Environment (getArgs)
-import           Data.List (foldl', sortBy)
+import           Data.List (sortBy)
 import           Data.Function (on)
 import           Prelude hiding (words)
 
@@ -36,8 +36,10 @@ main = do
   let board = B.pack boardSpec
   content <- B.readFile dictFile
   let dict = T.fromList (B.lines content)
-  let paths = [ G.dfs d n (G.boggleGraph 4)
+  let graph = G.boggleGraph 4
+  let paths = [ path
               | d <- [3..10]
-              , n <- [0..15]]
-  let words = foldl' S.union S.empty (map (findWords dict board) paths)
+              , n <- [0..15]
+              , path <- G.dfs d n graph]
+  let words = findWords dict board paths
   mapM_ B.putStrLn (sortBy (compare `on` B.length) (S.toList words))
