@@ -2,10 +2,10 @@ module Main where
 
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Set as S
-import System.Environment (getArgs)
-import Data.List (foldl', sortBy)
-import Data.Function (on)
-import Prelude hiding (words)
+import           System.Environment (getArgs)
+import           Data.List (foldl', sortBy)
+import           Data.Function (on)
+import           Prelude hiding (words)
 
 import qualified Boggle.Graph as G
 import qualified Boggle.Trie  as T

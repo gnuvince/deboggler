@@ -8,8 +8,8 @@ module Boggle.Graph ( Graph
 where
 
 import qualified Data.IntMap as M
-import qualified Data.Set    as S
-import qualified Data.List   as L
+import qualified Data.Set as S
+import qualified Data.List as L
 
 type Cube = Int
 
