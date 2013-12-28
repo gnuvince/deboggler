@@ -3,3 +3,6 @@
 *.prof
 Main
 dist
+*.aux
+*.ps
+*.hp
