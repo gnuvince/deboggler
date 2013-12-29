@@ -12,7 +12,7 @@ import           Data.List (foldl')
 import           Prelude hiding (words)
 import           Data.Maybe (fromMaybe)
 
-data Trie = MkTrie Bool (M.Map Char Trie)
+data Trie = MkTrie !Bool (M.Map Char Trie)
           deriving (Show, Eq)
 
 -- |Create an empty trie.
