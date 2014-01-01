@@ -6,6 +6,7 @@ import           System.Environment (getArgs)
 import           Data.List (sortBy)
 import           Data.Function (on)
 import           Prelude hiding (words)
+import           Control.Parallel.Strategies
 
 import qualified Boggle.Graph as G
 import qualified Boggle.Trie  as T
@@ -37,9 +38,8 @@ main = do
   content <- B.readFile dictFile
   let dict = T.fromList (B.lines content)
   let graph = G.boggleGraph 4
-  let paths = [ path
-              | d <- [3..10]
-              , n <- [0..15]
-              , path <- G.dfs d n graph]
+  let paths = concat $
+                     parMap rdeepseq (\(n,d) -> G.dfs d n graph)
+                     [(n, d) | n <- [0..15], d <- [3..10]]
   let words = findWords dict board paths
   mapM_ B.putStrLn (sortBy (compare `on` B.length) (S.toList words))
