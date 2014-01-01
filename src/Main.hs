@@ -19,17 +19,13 @@ type Dict = T.Trie
 pathToWord :: B.ByteString -> [Int] -> B.ByteString
 pathToWord board path = B.pack [board `B.index` x | x <- path]
 
-
--- |Given a set of words, a board specification and a list of paths,
--- return a set of all the valid words (i.e. words in the dictionary).
-findWords :: Dict -> B.ByteString -> [[Int]] -> S.Set B.ByteString
-findWords dict board paths =
-    S.fromList [ word
-               | path <- paths
-               , let word = pathToWord board path
-               , T.contains word dict
-               ]
-
+process :: Dict -> B.ByteString -> G.Graph -> (Int, Int) -> [B.ByteString]
+process dict board graph (n, d) =
+        [ word |
+          path <- G.dfs d n graph
+        , let word = pathToWord board path
+        , T.contains word dict
+        ]
 
 main :: IO ()
 main = do
@@ -38,8 +34,6 @@ main = do
   content <- B.readFile dictFile
   let dict = T.fromList (B.lines content)
   let graph = G.boggleGraph 4
-  let paths = concat $
-                     parMap rdeepseq (\(n,d) -> G.dfs d n graph)
-                     [(n, d) | n <- [0..15], d <- [3..10]]
-  let words = findWords dict board paths
+  let words = S.fromList $ concat $ parMap rdeepseq (process dict board graph)
+                                           [(n, d) | n <- [0..15], d <- [3..10]]
   mapM_ B.putStrLn (sortBy (compare `on` B.length) (S.toList words))
